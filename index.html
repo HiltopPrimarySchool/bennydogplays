@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BennydogPlays | Roblox HQ</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Load Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a202c; /* Dark Black */
+            --accent-color: #00e0ff; /* Electric Cyan */
+            --gradient-start: #0a1930; /* Deep Blue */
+            --gradient-end: #030a11;  /* Near Black */
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Custom Keyframe for subtle background pulse */
+        @keyframes subtle-pulse {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animated-bg {
+            background: linear-gradient(-45deg, var(--gradient-start), var(--gradient-end), var(--primary-color));
+            background-size: 400% 400%;
+            animation: subtle-pulse 15s ease infinite;
+        }
+
+        /* Custom style to mimic the 'pixelated' or 'digital glitch' text from the logo */
+        .glitch-text {
+            color: var(--accent-color);
+            text-shadow: 
+                0 0 5px rgba(0, 224, 255, 0.7), 
+                0 0 10px rgba(0, 224, 255, 0.5), 
+                0 0 20px rgba(0, 224, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .glitch-text:hover {
+            transform: scale(1.05);
+            text-shadow: 
+                0 0 7px rgba(0, 255, 255, 1), 
+                0 0 15px rgba(0, 255, 255, 0.8), 
+                0 0 30px rgba(0, 255, 255, 0.6);
+        }
+
+        /* General Card & Button Styling */
+        .card {
+            background-color: rgba(26, 32, 44, 0.7); /* Primary color with transparency */
+            border: 1px solid rgba(0, 224, 255, 0.2);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 224, 255, 0.1);
+        }
+
+        .nav-link {
+            transition: color 0.3s ease, transform 0.2s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-color);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            transform: scaleX(1);
+        }
+
+        /* Animation classes for page content fade-in */
+        .animate-slide-up {
+            animation: slideUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Modal Transition Styles */
+        .modal-content-transition {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="animated-bg min-h-screen text-gray-100">
+
+    <!-- Navigation Bar (Fixed Top) -->
+    <nav class="sticky top-0 z-50 bg-gray-900 bg-opacity-80 backdrop-blur-sm shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/Branding -->
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-2xl font-black glitch-text tracking-widest cursor-pointer" onclick="showPage('home')">
+                        BennydogPlays
+                    </span>
+                </div>
+                
+                <!-- Desktop Links -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" class="nav-link text-white hover:text-cyan-400 px-3 py-2 rounded-md font-medium" data-page="home" onclick="showPage('home')">Homepage</a>
+                        <a href="#" class="nav-link text-white hover:text-cyan-400 px-3 py-2 rounded-md font-medium" data-page="about" onclick="showPage('about')">About Me</a>
+                        <a href="#" class="nav-link text-white hover:text-cyan-400 px-3 py-2 rounded-md font-medium" data-page="careers" onclick="showPage('careers')">Careers</a>
+                        <a href="#" class="nav-link text-white hover:text-cyan-400 px-3 py-2 rounded-md font-medium" data-page="videos" onclick="showPage('videos')">Recent Videos</a>
+                        <a href="#" class="nav-link text-white hover:text-cyan-400 px-3 py-2 rounded-md font-medium" data-page="contact" onclick="showPage('contact')">Contact Me</a>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#" class="block nav-link text-white hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium" data-page="home" onclick="showPage('home')">Homepage</a>
+                <a href="#" class="block nav-link text-white hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium" data-page="about" onclick="showPage('about')">About Me</a>
+                <a href="#" class="block nav-link text-white hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium" data-page="careers" onclick="showPage('careers')">Careers</a>
+                <a href="#" class="block nav-link text-white hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium" data-page="videos" onclick="showPage('videos')">Recent Videos</a>
+                <a href="#" class="block nav-link text-white hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium" data-page="contact" onclick="showPage('contact')">Contact Me</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- HOME PAGE -->
+            <section id="home" class="page-content animate-slide-up">
+                <div class="text-center py-20 lg:py-32">
+                    <!-- Character and Controller Icon based on the image -->
+                    <div class="flex justify-center items-center space-x-6 mb-8">
+                        <!-- Placeholder Character Icon (Representing a Roblox Avatar) -->
+                        <div class="w-16 h-20 bg-gray-800 rounded-lg shadow-xl relative overflow-hidden transform hover:scale-110 transition duration-300">
+                             <!-- Simple block character representation -->
+                            <div class="absolute inset-0 bg-white opacity-20 animate-pulse"></div>
+                            <div class="w-8 h-8 bg-black mx-auto mt-2 rounded-sm"></div>
+                            <div class="w-12 h-1 bg-white mx-auto mt-1"></div>
+                            <div class="w-12 h-1 bg-black mx-auto mt-1"></div>
+                            <div class="w-12 h-1 bg-white mx-auto mt-1"></div>
+                        </div>
+                         <!-- Controller Icon (Inline SVG for glow) -->
+                        <svg class="w-20 h-20 fill-current text-cyan-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="filter: drop-shadow(0 0 15px var(--accent-color)); transform: rotate(-5deg); transition: transform 0.5s ease;">
+                            <path d="M472 0H40C17.9 0 0 17.9 0 40v352c0 22.1 17.9 40 40 40h432c22.1 0 40-17.9 40-40V40c0-22.1-17.9-40-40-40zm-160 384H200v-32h112v32zm-64-160h-32v-32h32v32zm32-64h-32v-32h32v32zm-96 64h-32v-32h32v32zm0-64h-32v-32h32v32zm160 0h-64v-64h64v64zm0 96h-64v-64h64v64z"/>
+                        </svg>
+                    </div>
+
+                    <h1 class="text-6xl sm:text-7xl lg:text-8xl font-extrabold mb-4 glitch-text">
+                        THE ROBLOX ZONE
+                    </h1>
+                    <p class="text-xl sm:text-2xl text-gray-400 mb-10">
+                        Roblox high-stakes gameplay, rare items showcases, and the best community.
+                    </p>
+                    <button onclick="showPage('videos')" class="bg-cyan-500 hover:bg-cyan-600 text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300 ease-in-out border-2 border-transparent hover:border-white">
+                        WATCH LATEST VIDEOS <i class="fas fa-play ml-2"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- ABOUT ME PAGE (Hidden by Default) -->
+            <section id="about" class="page-content hidden animate-slide-up">
+                <h2 class="text-4xl font-bold glitch-text mb-8 border-b-2 border-cyan-500 pb-3">About BennydogPlays</h2>
+                <div class="card p-8 rounded-2xl">
+                    <p class="text-lg mb-4">
+                        Hey everyone! I'm Benny, the dog behind the controller. This channel started as a way to share my ridiculously intense **Roblox** moments—the wins, the fails, and the hunt for the coolest limiteds. If it's a hot new experience, a massive trading platform, or a survival challenge, you'll find me there.
+                    </p>
+                    <p class="text-lg mb-4">
+                        We are focused on **Roblox experiences, deep-dive game guides (Blox Fruits, Adopt Me!, Murder Mystery 2), and hilarious community moments**. Our community is all about positive vibes, trading tips, and sharing the love for the platform.
+                    </p>
+                </div>
+            </section>
+
+            <!-- CAREERS PAGE (Hidden by Default) -->
+            <section id="careers" class="page-content hidden animate-slide-up">
+                <h2 class="text-4xl font-bold glitch-text mb-8 border-b-2 border-cyan-500 pb-3">Join the Team: Careers in Roblox Content</h2>
+                <p class="text-xl text-gray-400 mb-8">
+                    We're expanding! Think you have what it takes to join the most energized content team on the web? Check out the open missions below.
+                </p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Job Card 1 -->
+                    <div class="card p-6 rounded-2xl">
+                        <h3 class="text-2xl font-bold text-cyan-400 mb-2">Channel Manager</h3>
+                        <p class="text-gray-400 mb-4">Mission: To help manage all the content, comments and feedback I get on my channel.</p>
+                        <ul class="list-disc list-inside text-gray-300 ml-4 mb-4">
+                            <li>Fluency in Adobe Premiere/DaVinci Resolve</li>
+                            <li>Ability to work under a tight upload schedule</li>
+                            <li>Minimum 200 hours in top Roblox games (proof required)</li>
+                        </ul>
+                        <button onclick="openApplyModal('Channel Manger')" class="text-sm bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded-lg transform hover:scale-95 transition duration-200">
+                            Apply for Mission <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                    <!-- Job Card 2 -->
+                </div>
+            </section>
+
+            <!-- RECENT VIDEOS PAGE (Hidden by Default) -->
+            <section id="videos" class="page-content hidden animate-slide-up">
+                <h2 class="text-4xl font-bold glitch-text mb-8 border-b-2 border-cyan-500 pb-3">Recent Video Drops</h2>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Video Card 1 -->
+                    <div class="card p-4 rounded-xl">
+                        <img src="https://i.ytimg.com/an_webp/Nhc-cH1rse8/mqdefault_6s.webp?du=3000&sqp=CJig08gG&rs=AOn4CLCcrDBK_RCgjj_Vaon_WyLWDz2AZw" onerror="this.src='https://i.ytimg.com/an_webp/Nhc-cH1rse8/mqdefault_6s.webp?du=3000&sqp=CJig08gG&rs=AOn4CLCcrDBK_RCgjj_Vaon_WyLWDz2AZw'" alt="Video Thumbnail" class="w-full rounded-lg mb-3 transform hover:scale-[1.02] transition duration-300">
+                        <h4 class="text-xl font-semibold text-white hover:text-cyan-400 transition duration-200"><a href="https://www.youtube.com/watch?v=Nhc-cH1rse8" target="_blank">The grand REVEAL of Parkview Inn</a></h4>
+                        <p class="text-gray-400 text-sm">3 days ago | 15 min 20 sec</p>
+                    </div>
+                </div>
+                <div class="text-center mt-12">
+                    <a href="https://www.youtube.com/@BennydogPlays" target="_blank" class="text-lg font-bold text-cyan-400 hover:text-white transition duration-200 hover:border-b border-cyan-400 inline-flex items-center">
+                        View All Videos on YouTube <i class="fab fa-youtube ml-2 text-red-500"></i>
+                    </a>
+                </div>
+            </section>
+
+            <!-- CONTACT ME PAGE (Hidden by Default) -->
+            <section id="contact" class="page-content hidden animate-slide-up">
+                <h2 class="text-4xl font-bold glitch-text mb-8 border-b-2 border-cyan-500 pb-3">Get In Touch</h2>
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Contact Form (2/3 width on desktop) -->
+                    <div class="lg:col-span-2">
+                        <div class="card p-8 rounded-2xl">
+                            <h3 class="text-2xl font-semibold text-cyan-400 mb-4">Send an Encrypted Message</h3>
+                            <form action="#" method="POST" class="space-y-4">
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-300 mb-1">Your Name/Handle</label>
+                                    <input type="text" id="name" name="name" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-cyan-500 focus:border-cyan-500 text-white transition duration-200" placeholder="Agent 007">
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Your Email</label>
+                                    <input type="email" id="email" name="email" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-cyan-500 focus:border-cyan-500 text-white transition duration-200" placeholder="contact@example.com">
+                                </div>
+                                <div>
+                                    <label for="message" class="block text-sm font-medium text-gray-300 mb-1">Your Message/Proposal</label>
+                                    <textarea id="message" name="message" rows="4" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-cyan-500 focus:border-cyan-500 text-white transition duration-200" placeholder="Let's talk business or collabs!"></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-lg transform hover:scale-[1.01] transition duration-300 ease-in-out">
+                                    Send Transmission <i class="fas fa-paper-plane ml-2"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Socials (1/3 width on desktop) -->
+                    <div class="lg:col-span-1">
+                        <div class="card p-6 rounded-2xl">
+                            <h3 class="text-2xl font-semibold text-cyan-400 mb-4">Social Hub</h3>
+                            <div class="space-y-3">
+                                <a href="https://www.youtube.com/@BennydogPlays" target="_blank" class="flex items-center p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition duration-200 transform hover:translate-x-1">
+                                    <i class="fab fa-youtube text-red-600 w-6"></i>
+                                    <span class="ml-3 font-medium">YouTube (Main Channel)</span>
+                                </a>
+                                <a href="https://discord.gg/AaSb9yaP6E" target="_blank" class="flex items-center p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition duration-200 transform hover:translate-x-1">
+                                    <i class="fab fa-discord text-indigo-400 w-6"></i>
+                                    <span class="ml-3 font-medium">Discord Community</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 bg-opacity-70 mt-10 p-6 text-center text-gray-400 text-sm">
+        <p>&copy; 2025 BennydogPlays. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Application Modal (Non-alert replacement) -->
+    <div id="apply-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-gray-900 bg-opacity-75 backdrop-blur-sm" onclick="closeApplyModal()">
+        <div class="card p-8 w-11/12 max-w-lg rounded-xl shadow-2xl modal-content-transition transform scale-95 opacity-0" id="modal-content" onclick="event.stopPropagation()">
+            <h3 class="text-3xl font-bold glitch-text mb-2">Mission Application</h3>
+            <p class="text-gray-300 mb-4">Applying for: <strong id="job-title-display" class="text-cyan-400">Job Title</strong></p>
+            
+            <form id="application-form" onsubmit="submitApplication(event)">
+                <input type="hidden" id="job-title-input" name="jobTitle">
+
+                <!-- Discord Username -->
+                <div class="mb-4">
+                    <label for="discord-username" class="block text-sm font-medium text-gray-300 mb-1">Discord Username (Mandatory)</label>
+                    <input type="text" id="discord-username" required class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-cyan-500 focus:border-cyan-500 text-white transition duration-200" placeholder="BennyDog#0001">
+                </div>
+
+                <!-- Reason for Apply -->
+                <div class="mb-4">
+                    <label for="reason-for-apply" class="block text-sm font-medium text-gray-300 mb-1">Reason for Applying</label>
+                    <textarea id="reason-for-apply" rows="2" required class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-cyan-500 focus:border-cyan-500 text-white transition duration-200" placeholder="Why are you the perfect fit for this mission?"></textarea>
+                </div>
+
+                <!-- Strengths and Weaknesses -->
+                <div class="mb-4">
+                    <label for="strengths-weaknesses" class="block text-sm font-medium text-gray-300 mb-1">Strengths and Weaknesses</label>
+                    <textarea id="strengths-weaknesses" rows="2" required class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-cyan-500 focus:border-cyan-500 text-white transition duration-200" placeholder="Tell us about your technical and personal skills (e.g., 'Strong: Editing, Weak: Time management')."></textarea>
+                </div>
+
+                <!-- Previous Experience -->
+                <div class="mb-6">
+                    <label for="previous-experience" class="block text-sm font-medium text-gray-300 mb-1">Previous Experience (Links/Details)</label>
+                    <textarea id="previous-experience" rows="3" required class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-cyan-500 focus:border-cyan-500 text-white transition duration-200" placeholder="List relevant projects, channels, or roles."></textarea>
+                </div>
+                
+                <div id="form-message" class="text-center py-2 rounded-lg mb-4 hidden"></div>
+
+                <button type="submit" id="submit-button" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 rounded-lg transition duration-300 transform hover:scale-[1.01]">
+                    Submit Application <i class="fas fa-paper-plane ml-2"></i>
+                </button>
+            </form>
+            <button onclick="closeApplyModal()" class="mt-4 w-full text-sm text-gray-400 hover:text-white transition duration-200">
+                Close Window
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page-content');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // Function to toggle mobile menu visibility
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Function to handle page visibility and active links
+        function showPage(pageId) {
+            // Hide mobile menu on link click
+            mobileMenu.classList.add('hidden');
+
+            // 1. Hide all pages and remove animation class
+            pages.forEach(page => {
+                page.classList.add('hidden');
+                page.classList.remove('animate-slide-up');
+            });
+
+            // 2. Show the selected page and apply animation
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.remove('hidden');
+                // Force reflow/repaint to restart CSS animation
+                void selectedPage.offsetWidth; 
+                selectedPage.classList.add('animate-slide-up');
+            }
+
+            // 3. Update active navigation link
+            navLinks.forEach(link => {
+                link.classList.remove('active', 'text-cyan-400');
+                link.classList.add('text-white');
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('active', 'text-cyan-400');
+                    link.classList.remove('text-white');
+                }
+            });
+
+            // Update URL hash for sharing/bookmarking
+            history.pushState(null, '', `#${pageId}`);
+        }
+        
+        // --- Modal Functions for Careers Page ---
+
+        function openApplyModal(jobTitle) {
+            const modal = document.getElementById('apply-modal');
+            const content = document.getElementById('modal-content');
+            const jobTitleDisplay = document.getElementById('job-title-display');
+            const jobTitleInput = document.getElementById('job-title-input');
+            const formMessage = document.getElementById('form-message');
+            const applicationForm = document.getElementById('application-form');
+            const submitButton = document.getElementById('submit-button');
+
+            // Reset form state
+            applicationForm.reset();
+            formMessage.classList.add('hidden');
+            formMessage.textContent = '';
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'Submit Application <i class="fas fa-paper-plane ml-2"></i>';
+
+            // Set job title
+            jobTitleDisplay.textContent = jobTitle;
+            jobTitleInput.value = jobTitle;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex'); // Show and center the modal
+
+            // Animation in
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeApplyModal() {
+            const modal = document.getElementById('apply-modal');
+            const content = document.getElementById('modal-content');
+
+            // Animation out
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300); // Wait for transition to complete before hiding
+        }
+
+        async function submitApplication(event) {
+            event.preventDefault();
+
+            // Helper function to display temporary messages in the modal
+            function displayMessage(message, classes) {
+                const formMessage = document.getElementById('form-message');
+                formMessage.textContent = message;
+                formMessage.className = `text-center py-2 rounded-lg mb-4 ${classes}`;
+                formMessage.classList.remove('hidden');
+            }
+
+            // !!! IMPORTANT: USER MUST REPLACE THIS WITH THEIR ACTUAL DISCORD WEBHOOK URL !!!
+            // You can generate a webhook in your Discord server's channel settings -> Integrations.
+            const discordWebhookUrl = 'https://discord.com/api/webhooks/1438269714886299768/vkNMqG5lQYY9hY3at5RbCF-5gV9qnLpUEFyZKqW3_Be9Q4oaerMG_y0ntEr9onDPKGOK';
+            
+            if (discordWebhookUrl.includes('YOUR_WEBHOOK_')) {
+                displayMessage('Error: Please replace the placeholder Discord Webhook URL in the script before submitting.', 'bg-red-800 text-white');
+                return;
+            }
+
+            const jobTitle = document.getElementById('job-title-input').value;
+            const discordUsername = document.getElementById('discord-username').value;
+            const reasonForApply = document.getElementById('reason-for-apply').value;
+            const strengthsWeaknesses = document.getElementById('strengths-weaknesses').value;
+            const previousExperience = document.getElementById('previous-experience').value;
+            const submitButton = document.getElementById('submit-button');
+            const form = document.getElementById('application-form');
+
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
+            displayMessage('Sending application...', 'bg-gray-700 text-white');
+
+            // Constructing the Discord Webhook Payload
+            const payload = {
+                username: "BennydogPlays Application Bot",
+                avatar_url: "https://placehold.co/100x100/00e0ff/1a202c?text=BD", // Simple placeholder for bot icon
+                embeds: [
+                    {
+                        title: `NEW MISSION APPLICATION: ${jobTitle}`,
+                        color: 32768, // Cyan color in decimal
+                        fields: [
+                            {
+                                name: "🎯 Mission Applied For",
+                                value: jobTitle,
+                                inline: false
+                            },
+                            {
+                                name: "🕹️ Discord User",
+                                value: `\`${discordUsername}\``,
+                                inline: false
+                            },
+                            {
+                                name: "📝 Reason for Applying",
+                                value: reasonForApply.substring(0, 1024), // Discord field limit
+                                inline: false
+                            },
+                            {
+                                name: "💪 Strengths & 💡 Weaknesses",
+                                value: strengthsWeaknesses.substring(0, 1024),
+                                inline: false
+                            },
+                            {
+                                name: "💼 Previous Experience / Portfolio",
+                                value: previousExperience.substring(0, 1024),
+                                inline: false
+                            }
+                        ],
+                        timestamp: new Date().toISOString(),
+                        footer: {
+                            text: "Automated submission from BennydogPlays Website"
+                        }
+                    }
+                ]
+            };
+            
+            try {
+                // Exponential backoff retry logic
+                let response = null;
+                const MAX_RETRIES = 3;
+                let delay = 1000;
+
+                for (let i = 0; i < MAX_RETRIES; i++) {
+                    response = await fetch(discordWebhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        break; // Success
+                    } else if (response.status === 429) {
+                        // Rate limit exceeded, wait and retry
+                        const retryAfter = (response.headers.get('Retry-After') || delay / 1000) * 1000;
+                        delay = retryAfter + 500; // Add small buffer
+                        if (i < MAX_RETRIES - 1) {
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                        } else {
+                            throw new Error('Rate limit exceeded after multiple retries.');
+                        }
+                    } else {
+                        // Other error (e.g., bad request, invalid webhook)
+                        throw new Error(`Failed to send webhook: Status ${response.status}`);
+                    }
+                    delay *= 2; // Double delay for standard backoff
+                }
+
+                if (response && response.ok) {
+                    displayMessage('Application submitted successfully! We will contact you on Discord.', 'bg-green-600 text-white');
+                    form.reset(); // Clear the form on successful submission
+                    setTimeout(closeApplyModal, 3000); // Close after 3 seconds
+                } else {
+                    throw new Error('Submission failed after retries.');
+                }
+            } catch (error) {
+                console.error("Webhook Submission Error:", error);
+                displayMessage(`Error: Could not send application. Please check the console for details or verify your Discord Webhook URL.`, 'bg-red-600 text-white');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'Submit Application <i class="fas fa-paper-plane ml-2"></i>';
+            }
+        }
+        
+        // --- Initialization ---
+
+        // Initialize Page: Check the URL hash on load
+        window.onload = function() {
+            let initialPage = 'home';
+            if (window.location.hash) {
+                const hash = window.location.hash.substring(1);
+                if (document.getElementById(hash)) {
+                    initialPage = hash;
+                }
+            }
+            showPage(initialPage);
+        };
+
+        // Handle clicks on mobile links to ensure the page is loaded and menu is closed
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
